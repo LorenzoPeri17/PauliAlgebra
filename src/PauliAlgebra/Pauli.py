@@ -29,6 +29,12 @@ class PauliVector():
     def __repr__(self) -> str:
         return f'(Id:{self.vec[0]}, X:{self.vec[1]}, Y:{self.vec[2]}, Z:{self.vec[3]})'
 
+    def __eq__(self, other : 'PauliVector') -> bool:
+        try:
+            return np.allclose(self.vec,other.vec)
+        except Exception:
+            return all([sp.simplify(self.vec[i] - other.vec[i]) == 0 for i in range(4)])
+    
     def __add__(self,other : 'PauliVector') -> 'PauliVector':
 
         if isinstance(other,PauliVector):
@@ -87,6 +93,17 @@ class PauliVector():
     def simplify(self) -> 'PauliVector':
         self.vec = np.array([sp.simplify(i) for i in self.vec],dtype=object)
         return self
+    
+    def exponentiate(self) -> 'PauliVector':
+
+        norm = np.sqrt(np.sum(self.vec[1:]**2))
+        versor = self.vec[1:]/norm
+
+        argument = -1j * norm
+
+        exp_vec = np.array([np.cos(argument), *(1j*np.sin(argument)*versor)],dtype=object)
+        
+        return PauliVector(np.exp(self.vec[0])*exp_vec)
     
     @staticmethod
     def cross(a : np.ndarray[object, Literal[3]], b : np.ndarray[object, Literal[3]]) -> np.ndarray[object, Literal[3]]:
