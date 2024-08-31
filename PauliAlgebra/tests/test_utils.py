@@ -1,7 +1,8 @@
 import pytest
 import numpy as np
+from numpy.testing import assert_allclose
 
-from PauliAlgebra.Pauli import PauliVector
+from PauliAlgebra import PauliVector # type: ignore
 
 _Id = np.eye(2, dtype = np.cdouble)
 
@@ -16,9 +17,6 @@ _z = np.array([[1, 0],
 
 _Pauli_num = [_Id, _x, _y, _z]
 
-def _are_close(a, b):
-    return np.allclose(np.array(a, dtype = np.cdouble), np.array(b, dtype = np.cdouble))
-
 @pytest.mark.parametrize('v', [np.random.random(4) for _ in range(1000)])
 def test_expansion(v):
 
@@ -30,8 +28,8 @@ def test_expansion(v):
         expected += vv * _Pauli_num[i]
     
     res = pv.to_matrix(dtype = np.cdouble)
-
-    assert _are_close(res, expected)
+    
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('vr, vi', [(np.random.random(4), np.random.random(4)) for _ in range(1000)])
 def test_expansion_complex(vr, vi):
@@ -44,10 +42,12 @@ def test_expansion_complex(vr, vi):
 
     for i, vv in enumerate(v):
         expected += vv * _Pauli_num[i]
+        
+    expected = np.array(expected, dtype=np.cdouble)
     
     res = pv.to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1, v2', [(np.random.random(3), np.random.random(3)) for _ in range(1000)])
 def test_cross(v1, v2):
@@ -56,7 +56,7 @@ def test_cross(v1, v2):
 
     expected = np.cross(v1, v2)
 
-    assert _are_close(res, expected)
+    assert_allclose(np.array(res, dtype=np.double), expected)
 
 
 @pytest.mark.parametrize('v1r, v1i, v2r, v2i', [(np.random.random(3), np.random.random(3), np.random.random(3), np.random.random(3)) for _ in range(1000)])
@@ -69,4 +69,4 @@ def test_cross_complex(v1r, v1i, v2r, v2i):
 
     expected = np.cross(v1, v2)
 
-    assert _are_close(res, expected)
+    assert_allclose(np.array(res, dtype=np.cdouble), expected)

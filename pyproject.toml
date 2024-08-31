@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PauliAlgebra"
-version="0.1.0"
+version="0.2.0"
 authors = [
     {name = "Lorenzo Peri", email = "lorenzo@quantummotion.tech"},
 ]
@@ -12,16 +12,21 @@ description = "A Python library for the manipulation of Pauli operators and matr
 requires-python = ">=3.9"
 dependencies = [
     "numpy",
-    'scipy',
-    'sympy',
+    "sympy",
 ]
 
+[tool.setuptools.packages.find]
+where = ["PauliAlgebra/src"]
+
 [project.optional-dependencies]
-tests = ["pytest"]
+tests = [
+    "pytest", 
+    "scipy"
+]
 
 [tool.pytest.ini_options]
 testpaths = [
-    "tests",
+    "PauliAlgebra/tests",
 ]
 filterwarnings = [
     "ignore",

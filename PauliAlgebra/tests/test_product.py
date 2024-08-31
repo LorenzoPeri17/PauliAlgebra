@@ -1,10 +1,8 @@
 import pytest
 import numpy as np
 
-from PauliAlgebra.Pauli import PauliVector
-
-def _are_close(a, b):
-    return np.allclose(np.array(a, dtype = np.cdouble), np.array(b, dtype = np.cdouble))
+from PauliAlgebra import PauliVector # type: ignore
+from numpy.testing import assert_allclose
 
 @pytest.mark.parametrize('v1, v2', [(np.random.random(4), np.random.random(4)) for _ in range(1000)])
 def test_product(v1, v2):
@@ -16,7 +14,7 @@ def test_product(v1, v2):
 
     res = (pv1 * pv2).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1r, v1i, v2r, v2i', [(np.random.random(4), np.random.random(4), np.random.random(4), np.random.random(4)) for _ in range(1000)])
 def test_product_complex(v1r, v1i, v2r, v2i):
@@ -31,7 +29,7 @@ def test_product_complex(v1r, v1i, v2r, v2i):
 
     res = (pv1 * pv2).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1, x', [(np.random.random(4), np.random.random()) for _ in range(1000)])
 def test_product_scalar(v1, x):
@@ -42,11 +40,11 @@ def test_product_scalar(v1, x):
 
     res = (x * pv1).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
     res = (pv1 * x).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1r, v1i, x, y', [(np.random.random(4), np.random.random(4), np.random.random(), np.random.random()) for _ in range(1000)])
 def test_product_complex_scalar(v1r, v1i, x, y):
@@ -60,8 +58,8 @@ def test_product_complex_scalar(v1r, v1i, x, y):
 
     res = (z * pv1).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
     res = (pv1 * z).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)

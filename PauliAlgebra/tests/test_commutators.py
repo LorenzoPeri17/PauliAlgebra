@@ -1,10 +1,8 @@
 import pytest
 import numpy as np
 
-from PauliAlgebra.Pauli import PauliVector
-
-def _are_close(a, b):
-    return np.allclose(np.array(a, dtype = np.cdouble), np.array(b, dtype = np.cdouble))
+from PauliAlgebra import PauliVector # type: ignore
+from numpy.testing import assert_allclose
 
 def _commutator(a, b):
     return a @ b - b @ a
@@ -22,7 +20,7 @@ def test_commutator(v1, v2):
 
     res = (PauliVector.commutator(pv1, pv2)).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1r, v1i, v2r, v2i', [(np.random.random(4), np.random.random(4), np.random.random(4), np.random.random(4)) for _ in range(2500)])
 def test_commutator_complex(v1r, v1i, v2r, v2i):
@@ -37,7 +35,7 @@ def test_commutator_complex(v1r, v1i, v2r, v2i):
 
     res = (PauliVector.commutator(pv1, pv2)).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1, v2', [(np.random.random(4), np.random.random(4)) for _ in range(2500)])
 def test_anticommutator(v1, v2):
@@ -52,7 +50,7 @@ def test_anticommutator(v1, v2):
     print(expected)
     print(res)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
 
 @pytest.mark.parametrize('v1r, v1i, v2r, v2i', [(np.random.random(4), np.random.random(4), np.random.random(4), np.random.random(4)) for _ in range(2500)])
 def test_anticommutator_complex(v1r, v1i, v2r, v2i):
@@ -67,4 +65,4 @@ def test_anticommutator_complex(v1r, v1i, v2r, v2i):
 
     res = (PauliVector.anticommutator(pv1, pv2)).to_matrix(dtype = np.cdouble)
 
-    assert _are_close(res, expected)
+    assert_allclose(res, expected)
