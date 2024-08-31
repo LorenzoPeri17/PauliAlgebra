@@ -1,5 +1,4 @@
 import numpy as np
-import numpy.typing as npt
 from typing import Union, Literal
 from numbers import Number
 from sympy import S
@@ -28,6 +27,26 @@ class PauliVector():
 
     def __repr__(self) -> str:
         return f'(Id:{self.vec[0]}, X:{self.vec[1]}, Y:{self.vec[2]}, Z:{self.vec[3]})'
+    
+    @property
+    def Id(self) -> object:
+        return self.vec[0]
+    
+    @property
+    def trace(self) -> object:
+        return self.vec[0]/2
+    
+    @property
+    def x(self) -> object:
+        return self.vec[1]
+    
+    @property
+    def y(self) -> object:
+        return self.vec[2]
+    
+    @property
+    def z(self) -> object:
+        return self.vec[3]
 
     def __eq__(self, other : 'PauliVector') -> bool:
         try:
@@ -96,14 +115,27 @@ class PauliVector():
     
     def exponentiate(self) -> 'PauliVector':
 
-        norm = np.sqrt(np.sum(self.vec[1:]**2))
-        versor = self.vec[1:]/norm
+        try:
+            norm = np.sqrt(np.sum(self.vec[1:]**2))
+            versor = self.vec[1:]/norm
 
-        argument = -1j * norm
+            argument = -1j * norm
 
-        exp_vec = np.array([np.cos(argument), *(1j*np.sin(argument)*versor)],dtype=object)
+            exp_vec = np.array([np.cos(argument), *(1j*np.sin(argument)*versor)],dtype=object)
+            
+            return PauliVector(np.exp(self.vec[0])*exp_vec)
+        except Exception: # if it fails, it's probably because of sympy
+            norm = sp.sqrt(sp.simplify(sum(sp.simplify(self.vec[1:]**2))))
+            versor = sp.simplify(self.vec[1:]/norm)
+
+            argument = sp.simplify(-1j * norm)
+            _reduced_vec = [sp.simplify(1j*sp.sin(argument)*v) for v in versor]
+            exp_vec = np.array([sp.simplify(sp.cos(argument))] + _reduced_vec,dtype=object)
+            
+            return PauliVector(sp.exp(self.vec[0])*exp_vec)
         
-        return PauliVector(np.exp(self.vec[0])*exp_vec)
+    def adjoint(self) -> 'PauliVector':
+        return PauliVector(np.conj(self.vec))
     
     @staticmethod
     def cross(a : np.ndarray[object, Literal[3]], b : np.ndarray[object, Literal[3]]) -> np.ndarray[object, Literal[3]]:
