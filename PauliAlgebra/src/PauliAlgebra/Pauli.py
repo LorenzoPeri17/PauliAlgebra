@@ -9,6 +9,7 @@ def epsilon(i : int,j :int, k :int) -> float:
     return (i-j)*(j-k)*(k-i)/2
 
 Vec4 = Annotated[NDArray, Literal[4]]
+Seq4 = Annotated[Union[Sequence,NDArray], Literal[4]]
 Vec3 = Annotated[NDArray, Literal[3]]
 Mat22 = Annotated[NDArray, Literal[2,2]]
 spMat22 = Annotated[sp.Matrix, Literal[2,2]]
@@ -28,7 +29,7 @@ class PauliVector():
     
     _Pauli_num = [_Id, _x, _y, _z]
 
-    def __init__(self, vec : Vec4):
+    def __init__(self, vec : Seq4, dtype = object):
         _do_raise = False
         
         if not hasattr(vec, '__len__'):
@@ -40,7 +41,7 @@ class PauliVector():
         if _do_raise:
             raise ValueError('PauliVector must be constructed with an iterable of 4 elements')
         
-        self.vec = vec
+        self.vec : Vec4  = np.array(vec, dtype = dtype)
 
     def __repr__(self) -> str:
         return f'(Id:{self.vec[0]}, X:{self.vec[1]}, Y:{self.vec[2]}, Z:{self.vec[3]})'

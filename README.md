@@ -1,20 +1,23 @@
 # PauliAlgebra
 
+![win](https://github.com/LorenzoPeri17/PauliAlgebra/actions/workflows/Windows.yaml/badge.svg)
+![ubu](https://github.com/LorenzoPeri17/PauliAlgebra/actions/workflows/Ubuntu.yaml/badge.svg)
+![mac](https://github.com/LorenzoPeri17/PauliAlgebra/actions/workflows/macOs.yaml/badge.svg)
+
 `PauliAlgebra` is a module to deal with **exact** calculations of Pauli matrices
 
 The interface to the module is the class `PauliVector` that can be used to instantiate any `2x2` Hermitian matrix
 
 ```python
 from PauliAlgebra import PauliVector
-import numpy as np
 
 M = PauliVector(
-    np.array(
+    [
         1, # Identity
         2, # sigma x
         0, # sigma y
         1j  # sigma z
-    )
+    ]
 )
 ```
 
@@ -22,11 +25,11 @@ M = PauliVector(
 
 Alternatively, the module exposes the standard matrices
 
-* `Id` : `2x2` Identiy
+* `Id` : `2x2` Identity
 * `sigma_x`
 * `sigma_y`
 * `sigma_z`
-* `sigma_plus` 
+* `sigma_plus`
   
     ``` python
     sigma_plus = (sigma_x + 1j*sigma_y)/2 
@@ -66,7 +69,7 @@ Alternatively, the module exposes the standard matrices
 * Multiplication with a scalar or another `PauliVector` (performs matrix multiplication)
 * Division by a scalar
 
-So the above example could have been written as 
+So the above example could have been written as
 
 ```python
 from PauliAlgebra import (
@@ -76,6 +79,24 @@ from PauliAlgebra import (
 )
 
 M = Id + 2*sigma_x + 1j*sigma_z
+```
+
+## Commutators and Anticommutators
+
+This module allows for fast adn exact computation of commutators and anticommutators of two `PauliVector` using the relationship
+
+$$
+\left(\vec{a} \cdot \vec{\sigma}\right)\left(\vec{b} \cdot \vec{\sigma}\right) = Id~ \left(\vec{a} \cdot\vec{b} \right) + i \left(\vec{a} \times\vec{b} \right) \cdot \vec{\sigma}
+$$
+
+and the (anti)commutativity of dot and cross product.
+
+```python
+A = sigma_x
+B = sigma_y
+
+commAB = PauliVector.commutator(A,B) # = 2j*sigma_z
+anticommAB = PauliVector.anticommutator(A,B) # = 0
 ```
 
 ## Exponentiation
