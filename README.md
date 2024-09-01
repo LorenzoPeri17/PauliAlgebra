@@ -11,14 +11,12 @@ The interface to the module is the class `PauliVector` that can be used to insta
 ```python
 from PauliAlgebra import PauliVector
 
-M = PauliVector(
-    [
+M = PauliVector([
         1, # Identity
         2, # sigma x
         0, # sigma y
-        1j  # sigma z
-    ]
-)
+        1j # sigma z
+    ])
 ```
 
 > `PauliVector` is fully compatible with `sympy` expressions!
@@ -135,3 +133,14 @@ Once you are done performing algebra on a `PauliVector` you can turn it back int
 
 * `M.toMatrix()` -> `np.ndarray` (`shape==(2,2)`)
 * `M.to_sp()` -> `sp.Matrix` (`shape==(2,2)`)
+
+## Installation
+
+`PauliAlgebra` is available on pypi!
+It can be yours by simply
+
+```bash
+$ pip install PauliAlgebra
+```
+
+in the environment of your choice!

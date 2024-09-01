@@ -4,16 +4,21 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PauliAlgebra"
-version="0.2.0"
+version="1.0.0"
 authors = [
     {name = "Lorenzo Peri", email = "lorenzo@quantummotion.tech"},
 ]
 description = "A Python library for the manipulation of Pauli matrices"
 requires-python = ">=3.9"
+license = {file = "LICENSE"}
+readme = "README.md"
 dependencies = [
     "numpy",
     "sympy",
 ]
+
+[project.urls]
+Homepage = "https://https://github.com/LorenzoPeri17/PauliAlgebra"
 
 [tool.setuptools.packages.find]
 where = ["PauliAlgebra/src"]
