@@ -8,7 +8,7 @@ version="0.2.0"
 authors = [
     {name = "Lorenzo Peri", email = "lorenzo@quantummotion.tech"},
 ]
-description = "A Python library for the manipulation of Pauli operators and matrices"
+description = "A Python library for the manipulation of Pauli matrices"
 requires-python = ">=3.9"
 dependencies = [
     "numpy",
@@ -19,7 +19,7 @@ dependencies = [
 where = ["PauliAlgebra/src"]
 
 [project.optional-dependencies]
-tests = [
+test = [
     "pytest", 
     "scipy"
 ]

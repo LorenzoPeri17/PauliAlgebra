@@ -1,6 +1,6 @@
 import numpy as np # type: ignore
 from numpy.typing import NDArray
-from typing import Union, Literal, Annotated
+from typing import Any, Union, Literal, Annotated, Sequence
 from numbers import Number
 from sympy.core.singleton import SingletonRegistry # type: ignore
 import sympy as sp # type: ignore
@@ -11,6 +11,7 @@ def epsilon(i : int,j :int, k :int) -> float:
 Vec4 = Annotated[NDArray, Literal[4]]
 Vec3 = Annotated[NDArray, Literal[3]]
 Mat22 = Annotated[NDArray, Literal[2,2]]
+spMat22 = Annotated[sp.Matrix, Literal[2,2]]
 
 class PauliVector():
 
@@ -45,23 +46,23 @@ class PauliVector():
         return f'(Id:{self.vec[0]}, X:{self.vec[1]}, Y:{self.vec[2]}, Z:{self.vec[3]})'
     
     @property
-    def Id(self) -> object:
+    def Id(self) -> Any:
         return self.vec[0]
     
     @property
-    def trace(self) -> object:
+    def trace(self) -> Any:
         return self.vec[0]/2
     
     @property
-    def x(self) -> object:
+    def x(self) -> Any:
         return self.vec[1]
     
     @property
-    def y(self) -> object:
+    def y(self) -> Any:
         return self.vec[2]
     
     @property
-    def z(self) -> object:
+    def z(self) -> Any:
         return self.vec[3]
 
     def __eq__(self, other) -> bool:
@@ -136,7 +137,7 @@ class PauliVector():
             _matrix = _matrix + _v*_P
         return np.array(_matrix, dtype=dtype)
     
-    def to_sp(self)-> sp.Matrix:
+    def to_sp(self)-> spMat22:
         return sp.Matrix(self.to_matrix())
     
     def simplify(self) -> 'PauliVector':
@@ -169,7 +170,7 @@ class PauliVector():
     
     @staticmethod
     def cross(a : Vec3, b : Vec3) -> Vec3:
-        return np.array([a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]],dtype=object)
+        return np.array([a[1]*b[2] - a[2]*b[1], a[2]*b[0] - a[0]*b[2], a[0]*b[1] - a[1]*b[0]], dtype=object)
     
     @classmethod
     def commutator(cls, a : 'PauliVector',b : 'PauliVector') -> 'PauliVector':
@@ -189,8 +190,3 @@ sigma_minus = (sigma_x - 1j*sigma_y)/2
 
 P_up = (Id + sigma_z)/2
 P_down = (Id - sigma_z)/2
-
-if __name__ =='__main__':
-    
-    print(Id.to_matrix(dtype=np.cdouble))
-    print(Id.to_matrix(dtype=np.cdouble).dtype)

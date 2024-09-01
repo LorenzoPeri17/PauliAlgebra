@@ -6,6 +6,8 @@ from .Pauli import (
     sigma_z,
     sigma_plus,
     sigma_minus,
+    P_up,
+    P_down
 )
 
 __all__ = ['PauliVector', 
